@@ -1,0 +1,82 @@
+Esp32 C3 oled显示 hello word
+
+一．安装 arduino IDE 步骤
+1.在网页PC端下载Arduino IDE 
+下载网址：https://www.pcsoft.com.cn/soft/179988.html
+
+
+打开压缩包点击arduino IDE.exe ，点击安装
+
+
+   
+
+
+
+
+
+
+
+
+
+
+二．导入esp32 芯片包
+1、打开arduino IDE 点击File然后点击preperences
+
+
+点击之后显示这个页面
+
+
+将这个复制到
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json 
+Additional boards manager URLs 中，点击OK
+2.点击Tools
+
+搜索esp32 点击IN STALLED后会弹出窗口，然后点击OK，等待安装完成
+
+安装完成之后，就可以使用esp32 系列的芯片包了，然后选择 esp32 -c3 系列
+
+
+
+三、导入U8g2图形库
+1.点击Sketch  
+2.点击include library
+3.点击manage Libraries
+4.在搜索框中搜U8g2
+
+5.点击 IN STALLED 安装
+四、代入代码烧录
+1.复制到Arduino IDE 
+#include <Arduino.h>
+#include <U8g2lib.h>
+
+#ifdef U8X8_HAVE_HW_SPI
+#include <SPI.h>
+#endif
+#ifdef U8X8_HAVE_HW_I2C
+#include <Wire.h>
+#endif
+#define SDA_PIN 5
+#define SCL_PIN 6
+U8G2_SSD1306_72X40_ER_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);   // EastRising 0.42" OLED
+
+void setup(void) {
+  Wire.begin(SDA_PIN, SCL_PIN);
+  u8g2.begin();
+}
+
+void loop(void) {
+  u8g2.clearBuffer();         // clear the internal memory
+  u8g2.setFont(u8g2_font_ncenB08_tr); // choose a suitable font
+  u8g2.drawStr(0,10,"Hello World!");  // write something to the internal memory
+  u8g2.sendBuffer();          // transfer internal memory to the display
+  delay(1000);  
+}
+注："Hello World!" 括号内的文字符只能是英文字母，不能用中文
+2.用 type-c线将电脑和esp 32-c3开发板连接，连接成功后，会在电脑管理窗口显示串口
+3.在Arduino IDE中点击Tools,然后点击Port,选择串口Adafruit QT ESP32-C3
+4.点击Verfy
+5.点击upload
+6.等待上传
+
+上传成功后
+开发板的显示屏效果如下
